@@ -6,6 +6,7 @@
 <title>Reporte — La Vista</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap');
+
   :root {
     --bg: #e5ddd5;
     --bubble-bot: #ffffff;
@@ -16,178 +17,346 @@
     --primary: #075e54;
     --primary-light: #128c7e;
     --danger: #e02424;
+    --danger-light: #fde8e8;
     --success: #057a55;
+    --success-light: #dcf8c6;
+    --urgent: #e02424;
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; overflow: hidden; }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
   body {
     background: var(--bg);
     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23c4b5a5' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     font-family: 'Nunito', sans-serif;
-    display: flex; flex-direction: column;
+    display: flex;
+    flex-direction: column;
   }
+
+  /* ── Header ── */
   .header {
-    background: var(--primary); color: white;
-    padding: 12px 16px; display: flex; align-items: center; gap: 12px;
-    flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.25); z-index: 10;
+    background: var(--primary);
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    z-index: 10;
   }
+
   .avatar {
-    width: 40px; height: 40px; background: var(--primary-light);
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px;
+    background: var(--primary-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
     font-size: 20px; flex-shrink: 0;
   }
+
   .header-info h1 { font-size: 15px; font-weight: 800; }
-  .header-info p { font-size: 11px; opacity: 0.75; margin-top: 1px; }
-  .header-status { margin-left: auto; font-size: 11px; opacity: 0.75; }
+  .header-info p  { font-size: 11px; opacity: 0.75; margin-top: 1px; }
+
+  .step-pill {
+    margin-left: auto;
+    background: rgba(255,255,255,0.18);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 12px; font-weight: 700;
+    white-space: nowrap;
+  }
+
+  /* ── Chat scroll area ── */
   .chat {
-    flex: 1; overflow-y: auto; overflow-x: hidden;
-    padding: 14px 12px; display: flex; flex-direction: column; gap: 4px;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 14px 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    /* Scroll all the way to bottom */
+    scroll-behavior: smooth;
   }
+
+  /* ── Spacer that pushes content above input ── */
+  .chat-spacer { flex-shrink: 0; }
+
+  /* ── Input area — fixed height, never overlaps chat ── */
   .input-area {
-    flex-shrink: 0; background: #d0c8be;
-    border-top: 1px solid #b8b0a6; padding: 10px 12px 16px;
-    min-height: 70px; max-height: 200px; overflow-y: auto;
+    flex-shrink: 0;
+    background: #d0c8be;
+    border-top: 1px solid #b8b0a6;
+    padding: 10px 12px 16px;
+    min-height: 70px;
+    max-height: 220px;
+    overflow-y: auto;
   }
-  .bubble-wrap { display: flex; align-items: flex-end; gap: 6px; animation: fadeUp 0.2s ease; }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-  .bubble-wrap.bot { justify-content: flex-start; }
+
+  /* ── Bubbles ── */
+  .bubble-wrap {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    animation: fadeUp 0.2s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .bubble-wrap.bot  { justify-content: flex-start; }
   .bubble-wrap.user { justify-content: flex-end; }
+
   .bot-avatar {
-    width: 26px; height: 26px; background: var(--primary);
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
     font-size: 13px; flex-shrink: 0; margin-bottom: 2px;
   }
+
   .bubble {
-    max-width: 80%; padding: 9px 12px; border-radius: 16px;
-    font-size: 14px; line-height: 1.5; box-shadow: 0 1px 2px rgba(0,0,0,0.1); word-break: break-word;
+    max-width: 80%;
+    padding: 9px 12px;
+    border-radius: 16px;
+    font-size: 14px; line-height: 1.5;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    word-break: break-word;
   }
-  .bubble.bot { background: var(--bubble-bot); border-bottom-left-radius: 3px; color: var(--text); }
+
+  .bubble.bot  { background: var(--bubble-bot); border-bottom-left-radius: 3px; color: var(--text); }
   .bubble.user { background: var(--bubble-user); border-bottom-right-radius: 3px; color: var(--text); }
+
   .bubble .time { font-size: 10px; color: var(--muted); text-align: right; margin-top: 4px; }
   .bubble strong { font-weight: 800; }
+
+  /* ── Typing dots ── */
   .typing-wrap { display: flex; align-items: flex-end; gap: 6px; }
-  .typing-dots { background: white; border-radius: 16px; padding: 10px 14px; display: flex; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-  .dot { width: 7px; height: 7px; background: #aaa; border-radius: 50%; animation: bounce 1.2s infinite; }
+  .typing-dots {
+    background: white; border-radius: 16px; padding: 10px 14px;
+    display: flex; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  .dot {
+    width: 7px; height: 7px; background: #aaa; border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
   .dot:nth-child(2) { animation-delay: 0.2s; }
   .dot:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes bounce { 0%,60%,100%{transform:translateY(0);} 30%{transform:translateY(-5px);} }
+  @keyframes bounce {
+    0%,60%,100% { transform: translateY(0); }
+    30% { transform: translateY(-5px); }
+  }
+
+  /* ── Option chips ── */
   .options-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+
   .opt {
-    background: white; border: 2px solid var(--border); border-radius: 20px;
-    padding: 9px 15px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
-    color: var(--text); cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: transform 0.1s;
+    background: white; border: 2px solid var(--border);
+    border-radius: 20px; padding: 9px 15px;
+    font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+    color: var(--text); cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    transition: transform 0.1s;
+    line-height: 1.3;
   }
   .opt:active { transform: scale(0.95); }
+  .opt.urgent-opt { background: var(--danger); color: white; border-color: var(--danger); }
+
+  /* ── Text row ── */
   .text-row { display: flex; gap: 8px; align-items: flex-end; }
+
   .text-row textarea {
-    flex: 1; border: 2px solid var(--border); border-radius: 22px;
-    padding: 10px 15px; font-family: 'Nunito', sans-serif; font-size: 15px;
-    background: white; resize: none; outline: none; min-height: 44px; max-height: 100px;
-    overflow-y: auto; line-height: 1.4; box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    flex: 1;
+    border: 2px solid var(--border); border-radius: 22px;
+    padding: 10px 15px;
+    font-family: 'Nunito', sans-serif; font-size: 15px;
+    background: white; resize: none; outline: none;
+    min-height: 44px; max-height: 100px; overflow-y: auto;
+    line-height: 1.4;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   }
   .text-row textarea:focus { border-color: var(--primary); }
+
   .send-btn {
-    width: 44px; height: 44px; flex-shrink: 0; background: var(--primary);
-    border: none; border-radius: 50%; color: white; font-size: 18px; cursor: pointer;
+    width: 44px; height: 44px; flex-shrink: 0;
+    background: var(--primary); border: none; border-radius: 50%;
+    color: white; font-size: 18px; cursor: pointer;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   }
   .send-btn:active { opacity: 0.85; }
+
+  /* ── Report card ── */
   .report-card {
     background: white; border-radius: 14px; overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,0.12); max-width: 88%; margin: 2px 0;
   }
-  .rc-header { padding: 11px 14px; font-weight: 800; font-size: 14px; color: white; }
+  .rc-header {
+    padding: 11px 14px; font-weight: 800; font-size: 14px; color: white;
+  }
   .rc-header.normal { background: var(--primary); }
   .rc-header.urgent { background: var(--danger); }
-  .rc-body { padding: 12px 14px; font-size: 12px; line-height: 1.8; white-space: pre-wrap; word-break: break-word; color: var(--text); }
+  .rc-body {
+    padding: 12px 14px; font-size: 12px; line-height: 1.8;
+    white-space: pre-wrap; word-break: break-word; color: var(--text);
+  }
+
   .copy-btn {
-    display: block; width: 100%; margin-top: 8px; background: var(--primary);
-    color: white; border: none; border-radius: 12px; padding: 13px;
-    font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer;
+    display: block; width: 100%; margin-top: 8px;
+    background: var(--primary); color: white; border: none;
+    border-radius: 12px; padding: 13px;
+    font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800;
+    cursor: pointer; text-align: center;
   }
   .copy-btn.done { background: var(--success); }
   .copy-btn:active { opacity: 0.85; }
+
   .reset-btn {
-    display: block; width: 100%; margin-top: 8px; background: white;
-    color: var(--primary); border: 2px solid var(--primary); border-radius: 12px;
-    padding: 11px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer;
+    display: block; width: 100%; margin-top: 8px;
+    background: white; color: var(--primary);
+    border: 2px solid var(--primary);
+    border-radius: 12px; padding: 11px;
+    font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer;
   }
+
+  /* ── Destination card ── */
   .dest-card {
     background: white; border-radius: 14px; overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,0.12); max-width: 88%; margin: 2px 0;
   }
-  .dc-header { padding: 11px 14px; font-weight: 800; font-size: 13px; color: white; }
+  .dc-header {
+    padding: 11px 14px; font-weight: 800; font-size: 13px; color: white;
+  }
   .dc-header.urg { background: var(--danger); }
   .dc-header.norm { background: var(--primary); }
   .dc-body { padding: 12px 14px; }
-  .dest-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; border: 2px solid; }
-  .dest-item.urg { background: #fde8e8; border-color: var(--danger); }
-  .dest-item.norm { background: #dcf8c6; border-color: var(--success); }
+
+  .dest-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px; border-radius: 10px; border: 2px solid;
+  }
+  .dest-item.urg { background: var(--danger-light); border-color: var(--danger); }
+  .dest-item.norm { background: var(--success-light); border-color: var(--success); }
   .dest-icon { font-size: 28px; }
   .dest-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.5px; }
-  .dest-name { font-size: 16px; font-weight: 900; color: var(--text); margin-top: 2px; }
-  .dest-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .dest-name  { font-size: 16px; font-weight: 900; color: var(--text); margin-top: 2px; }
+  .dest-sub   { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* ── Error bubble ── */
+  .error-bubble {
+    background: var(--danger-light); border: 1px solid var(--danger);
+    border-radius: 14px; padding: 12px 14px;
+    font-size: 13px; color: var(--danger); font-weight: 700;
+    max-width: 88%; margin: 4px 0;
+  }
+
+  /* ── Loading ── */
+  .loading-bar {
+    height: 2px; background: rgba(255,255,255,0.3);
+    position: absolute; bottom: 0; left: 0; right: 0;
+  }
+  .loading-fill {
+    height: 2px; background: white; width: 0%;
+    transition: width 0.3s ease;
+  }
 </style>
 </head>
 <body>
 
 <script>
+// ═══════════════════════════════════════════════════
+// CONFIGURACIÓN — solo edita esta sección
+// ═══════════════════════════════════════════════════
 const CONFIG = {
   nombrePropiedad: "La Vista",
+
   empleados: ["Fabián","Enrique","Abraham","Dulce","Jaqueline","Karla"],
+
   grupos: {
-    urgente: { nombre: "Urgente 🚨 La Vista", descripcion: "Manda el reporte AQUÍ", emoji: "🚨" },
-    normal:  { nombre: "LAVISTA Operación",   descripcion: "Manda el reporte aquí",  emoji: "📋" }
+    urgente: {
+      nombre: "Urgente 🚨 La Vista",
+      descripcion: "Manda el reporte AQUÍ cuando es urgente",
+      emoji: "🚨"
+    },
+    normal: {
+      nombre: "LAVISTA Operación",
+      descripcion: "Manda el reporte aquí para reportes normales",
+      emoji: "📋"
+    }
   },
+
+  // Contexto de la propiedad para que la IA haga preguntas inteligentes
   contexto: `
 La Vista es una casa de renta vacacional con acceso al lago.
-Estructuras: Casa principal, Casa del lago (también "casa de la playa" o "casa de abajo"), Casa de visitas, Bungalow, área exterior.
-Proveedores conocidos: Miguel (plomería, electricidad, aires acondicionados), Anuar (backup de Miguel), Antonio (carpintería), Ongay (plomería especializada), Humberto (muebles).
-Infraestructura crítica: Aires acondicionados, Jacuzzi (35°C normal), Alberca, Internet Infinitum + Starlink de respaldo.
-El dueño es Carlos Sebastian. Nunca toma decisiones por él: pagos, personas extra, excepciones a reglas.
+Estructuras: Casa principal, Casa del lago (también llamada "casa de la playa" o "casa de abajo"), Casa de visitas, Bungalow, área exterior.
+Proveedores: Miguel (plomería, mantenimiento, electricidad, aires), Anuar (backup de Miguel), Antonio (carpintería/obra), Ongay (plomería especializada), Humberto (muebles).
+Infraestructura crítica: Aires acondicionados (lo más importante junto con jacuzzi), Jacuzzi (temperatura normal 35°C), Alberca (caldera solo cuando Carlos lo indica), Internet Infinitum (principal) + Starlink (backup).
+Problemas comunes: aire que no enfría (primero revisar si el control está en modo frío, no ventilador), luz que se va (preguntar si es solo en la casa o también vecinos), fugas de agua, proveedores que no regresan.
+El dueño es Carlos Sebastian. No tomar decisiones sin su autorización: pagos, personas extra, cambios estructurales, excepciones a las reglas.
 `
 };
+// ═══════════════════════════════════════════════════
 </script>
 
-<div class="header">
+<div class="header" style="position:relative">
   <div class="avatar">🏠</div>
   <div class="header-info">
     <h1>Asistente La Vista</h1>
     <p id="status-text">Iniciando...</p>
   </div>
-  <div class="header-status" id="header-status"></div>
+  <div class="step-pill" id="step-pill">—</div>
+  <div class="loading-bar"><div class="loading-fill" id="loading-fill"></div></div>
 </div>
 
 <div class="chat" id="chat"></div>
 <div class="input-area" id="input-area"></div>
 
 <script>
-const history = [];
+// ─── Globals ────────────────────────────────────────────────
+const history = [];   // {role, content} for Claude API
+const DATA    = {};   // collected answers
 let isLoading = false;
+let reporteDone = false;
 
+// ─── Helpers ────────────────────────────────────────────────
 function now() {
   return new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
 }
 
 function scrollChat() {
+  const c = document.getElementById('chat');
+  // Small delay so content is rendered first
   requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      const c = document.getElementById('chat');
-      c.scrollTop = c.scrollHeight;
-    });
+    requestAnimationFrame(() => { c.scrollTop = c.scrollHeight; });
   });
 }
 
-function setStatus(t) { document.getElementById('status-text').textContent = t; }
-function clearInput() { document.getElementById('input-area').innerHTML = ''; }
+function setStatus(txt) { document.getElementById('status-text').textContent = txt; }
+function setPill(txt)   { document.getElementById('step-pill').textContent = txt; }
 
+function setLoading(on) {
+  isLoading = on;
+  document.getElementById('loading-fill').style.width = on ? '100%' : '0%';
+  document.getElementById('loading-fill').style.transition = on ? 'width 1.5s ease' : 'none';
+}
+
+// ─── Bubble helpers ──────────────────────────────────────────
 function addBotBubble(html) {
   const chat = document.getElementById('chat');
   const wrap = document.createElement('div');
   wrap.className = 'bubble-wrap bot';
-  wrap.innerHTML = `<div class="bot-avatar">🤖</div><div class="bubble bot">${html.replace(/\n/g,'<br>')}<div class="time">${now()}</div></div>`;
+  wrap.innerHTML = `
+    <div class="bot-avatar">🤖</div>
+    <div class="bubble bot">${html.replace(/\n/g,'<br>')}<div class="time">${now()}</div></div>`;
   chat.appendChild(wrap);
   scrollChat();
+  return wrap;
 }
 
 function addUserBubble(text) {
@@ -199,7 +368,7 @@ function addUserBubble(text) {
   scrollChat();
 }
 
-function showTyping() {
+function showTypingDots() {
   const chat = document.getElementById('chat');
   const t = document.createElement('div');
   t.className = 'typing-wrap'; t.id = 'typing';
@@ -208,11 +377,14 @@ function showTyping() {
   scrollChat();
 }
 
-function hideTyping() {
+function removeTypingDots() {
   const t = document.getElementById('typing');
   if (t) t.remove();
 }
 
+function clearInput() { document.getElementById('input-area').innerHTML = ''; }
+
+// ─── Input renderers ─────────────────────────────────────────
 function renderOptions(opts) {
   clearInput();
   const area = document.getElementById('input-area');
@@ -220,231 +392,331 @@ function renderOptions(opts) {
   wrap.className = 'options-wrap';
   opts.forEach(opt => {
     const btn = document.createElement('button');
-    btn.className = 'opt';
+    btn.className = 'opt' + (opt.toLowerCase().includes('urgent') ? ' urgent-opt' : '');
     btn.textContent = opt;
-    btn.onclick = () => { if (!isLoading) userSend(opt); };
+    btn.onclick = () => { if (!isLoading) userPick(opt); };
     wrap.appendChild(btn);
   });
   area.appendChild(wrap);
   scrollChat();
 }
 
-function renderText(placeholder) {
+function renderTextInput(placeholder) {
   clearInput();
   const area = document.getElementById('input-area');
   const row = document.createElement('div');
   row.className = 'text-row';
   const ta = document.createElement('textarea');
   ta.placeholder = placeholder || 'Escribe aquí...';
-  ta.oninput = () => { ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight,100)+'px'; scrollChat(); };
-  ta.onkeydown = e => { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); doSend(); } };
+  ta.rows = 1;
+  ta.oninput = () => {
+    ta.style.height = 'auto';
+    ta.style.height = Math.min(ta.scrollHeight, 100) + 'px';
+    scrollChat();
+  };
+  ta.onkeydown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doSend(); }
+  };
   const btn = document.createElement('button');
   btn.className = 'send-btn'; btn.innerHTML = '➤';
   btn.onclick = doSend;
-  function doSend() { if (isLoading) return; const v=ta.value.trim(); if(!v) return; userSend(v); }
+
+  function doSend() {
+    if (isLoading) return;
+    const v = ta.value.trim();
+    if (!v) return;
+    userPick(v);
+  }
+
   row.appendChild(ta); row.appendChild(btn);
   area.appendChild(row);
   setTimeout(() => ta.focus(), 150);
   scrollChat();
 }
 
-async function userSend(val) {
-  addUserBubble(val);
-  clearInput();
-  isLoading = true;
-  setStatus('Escribiendo...');
-  showTyping();
+// ─── Core: send to Claude ─────────────────────────────────────
+async function askClaude(userMsg) {
+  setLoading(true);
+  setStatus('Pensando...');
+  showTypingDots();
 
-  history.push({ role: 'user', content: val });
+  history.push({ role: 'user', content: userMsg });
 
   try {
-    const res = await fetch('/.netlify/functions/Claude', {
+    const res = await fetch('/.netlify/functions/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system: buildSystem(), messages: history })
+      body: JSON.stringify({
+        system: buildSystemPrompt(),
+        messages: history
+      })
     });
+
     const data = await res.json();
-    const reply = data?.content?.[0]?.text || '';
+    const reply = data?.content?.[0]?.text || data?.error || '';
+
     history.push({ role: 'assistant', content: reply });
-    hideTyping();
-    isLoading = false;
+    removeTypingDots();
+    setLoading(false);
     setStatus('En línea');
-    handleReply(reply);
+    return reply;
+
   } catch(e) {
-    hideTyping();
-    isLoading = false;
+    removeTypingDots();
+    setLoading(false);
     setStatus('En línea');
-    addBotBubble('Error de conexión. Intenta de nuevo.');
-    renderOptions(['Reintentar']);
+    return JSON.stringify({ type: 'error', message: 'Error de conexión. Intenta de nuevo.' });
   }
 }
 
-function handleReply(raw) {
+// ─── System prompt ───────────────────────────────────────────
+function buildSystemPrompt() {
+  return `Eres un asistente de reportes de incidentes para "${CONFIG.nombrePropiedad}", una propiedad de renta vacacional.
+
+CONTEXTO DE LA PROPIEDAD:
+${CONFIG.contexto}
+
+TU TRABAJO:
+Guiar a los empleados paso a paso para generar un reporte completo de lo que pasó. Haces UNA pregunta a la vez. Las preguntas deben ser inteligentes y contextuales — no un formulario fijo. Basas cada pregunta en lo que ya saben según las respuestas anteriores.
+
+INFORMACIÓN RECOLECTADA HASTA AHORA:
+${JSON.stringify(DATA, null, 2)}
+
+REGLAS:
+- Siempre responde en JSON válido. Nunca texto plano, nunca markdown.
+- UNA sola acción por respuesta.
+- Las preguntas deben ser simples, directas, en español informal. Como hablaría un supervisor.
+- Si la respuesta es vaga o incompleta, pide que la detallen más antes de continuar.
+- Detecta si el incidente es urgente basándote en el contexto (huéspedes afectados ahorita, fuga activa, personas no autorizadas, equipos críticos fallando con huéspedes adentro, etc.)
+
+TIPOS DE RESPUESTA JSON:
+
+1. Pregunta con opciones:
+{"type":"options","question":"¿texto?","options":["op1","op2"],"key":"nombre_del_dato"}
+
+2. Pregunta de texto libre:
+{"type":"text","question":"¿texto?","placeholder":"ejemplo...","key":"nombre_del_dato"}
+
+3. Pedir más detalle (respuesta vaga):
+{"type":"clarify","message":"Lo que escribiste no es suficiente. Necesito saber [X]. Por ejemplo: [ejemplo concreto]."}
+
+4. Reporte completo listo:
+{"type":"report","urgent":true/false,"resumen":{"quien":"...","que_paso":"...","donde":"...","cuando":"...","involucrado":"...","estado_huespedes":"...","intentado":"...","necesitan":"...","evidencia":"..."}}
+
+5. Error:
+{"type":"error","message":"texto del error"}
+
+FLUJO SUGERIDO (adapta según contexto, no es fijo):
+1. Quién reporta → opciones con nombres del equipo
+2. Qué pasó → texto libre (pide detalle si es vago)
+3. Dónde exactamente → según lo que dijeron, pregunta lo relevante
+4. Cuándo lo notaron
+5. Si los huéspedes ya se quejaron o no (si aplica)
+6. Qué ya intentaron
+7. Qué necesitan de Carlos
+8. Si hay foto/video (solo si aplica al tipo de incidente)
+9. → Genera el reporte
+
+NO preguntes cosas irrelevantes. Si dijeron que no hay huéspedes, no preguntes si se quejaron. Si es un problema eléctrico, no preguntes por el número de personas. Usa el contexto para decidir qué preguntar.`;
+}
+
+// ─── Handle Claude response ───────────────────────────────────
+async function userPick(val) {
+  addUserBubble(val);
+  clearInput();
+
+  // Store last answered key
+  const lastKey = window._lastKey;
+  if (lastKey) DATA[lastKey] = val;
+
+  const reply = await askClaude(val);
+
   let parsed;
   try {
-    parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    parsed = JSON.parse(reply.replace(/```json|```/g,'').trim());
   } catch(e) {
-    addBotBubble('Error. Toca <strong>Nuevo reporte</strong>.');
+    addBotBubble('Hubo un error. Toca <strong>Nuevo reporte</strong> e intenta de nuevo.');
     return;
   }
 
-  if (parsed.type === 'question') {
-    addBotBubble(parsed.text);
-    if (parsed.options) renderOptions(parsed.options);
-    else renderText(parsed.placeholder || 'Escribe aquí...');
+  handleResponse(parsed);
+}
 
-  } else if (parsed.type === 'report') {
-    showReport(parsed);
+function handleResponse(r) {
+  if (!r || !r.type) return;
 
-  } else if (parsed.type === 'error') {
-    addBotBubble(parsed.message);
-    renderText('Escribe aquí...');
+  if (r.type === 'options') {
+    window._lastKey = r.key;
+    addBotBubble(r.question);
+    renderOptions(r.options);
+    setPill('Respondiendo...');
+
+  } else if (r.type === 'text') {
+    window._lastKey = r.key;
+    addBotBubble(r.question);
+    renderTextInput(r.placeholder || 'Escribe aquí...');
+    setPill('Respondiendo...');
+
+  } else if (r.type === 'clarify') {
+    window._lastKey = null;
+    addBotBubble('⚠️ ' + r.message);
+    renderTextInput('Explica con más detalle...');
+
+  } else if (r.type === 'report') {
+    buildFinalReport(r);
+
+  } else if (r.type === 'error') {
+    const chat = document.getElementById('chat');
+    const e = document.createElement('div');
+    e.className = 'bubble-wrap bot';
+    e.innerHTML = `<div class="bot-avatar">🤖</div><div class="error-bubble">⚠️ ${r.message}</div>`;
+    chat.appendChild(e);
+    scrollChat();
   }
 }
 
-function showReport(r) {
-  const urgent = r.urgent;
-  const grupo = urgent ? CONFIG.grupos.urgente : CONFIG.grupos.normal;
+// ─── Build final report ───────────────────────────────────────
+function buildFinalReport(r) {
+  reporteDone = true;
+  clearInput();
+  setPill('✅ Listo');
+  setStatus('Reporte generado');
 
-  const msg =
-`${urgent ? '🚨 URGENTE — REPORTE DE INCIDENTE' : '📋 REPORTE DE INCIDENTE'}
-📍 ${CONFIG.nombrePropiedad}
+  const s = r.resumen;
+  const urgent = r.urgent;
+
+  const enc = urgent
+    ? `🚨 URGENTE — REPORTE DE INCIDENTE\n📍 ${CONFIG.nombrePropiedad}`
+    : `📋 REPORTE DE INCIDENTE\n📍 ${CONFIG.nombrePropiedad}`;
+
+  const msg = `${enc}
 ━━━━━━━━━━━━━━━━━━━━
-${r.reporte}
+👤 Reporta: ${s.quien || '—'}
+
+❗ QUÉ PASÓ:
+${s.que_paso || '—'}
+
+📍 DÓNDE: ${s.donde || '—'}
+
+⏰ CUÁNDO: ${s.cuando || '—'}
+
+🧍 INVOLUCRADO: ${s.involucrado || '—'}
+
+😤 HUÉSPEDES: ${s.estado_huespedes || '—'}
+
+🔧 YA INTENTARON: ${s.intentado || '—'}
+
+📌 NECESITAN DE CARLOS: ${s.necesitan || '—'}
+
+📸 EVIDENCIA: ${s.evidencia || '—'}
 ━━━━━━━━━━━━━━━━━━━━`;
 
   const chat = document.getElementById('chat');
+  const wrap = document.createElement('div');
+  wrap.className = 'bubble-wrap bot';
+  wrap.style.animation = 'fadeUp 0.25s ease';
 
-  // Report card
-  const rWrap = document.createElement('div');
-  rWrap.className = 'bubble-wrap bot';
-  const inner = document.createElement('div');
-  inner.style.maxWidth = '88%';
   const card = document.createElement('div');
   card.className = 'report-card';
-  card.innerHTML = `<div class="rc-header ${urgent?'urgent':'normal'}">${urgent?'🚨 URGENTE':'📋 REPORTE LISTO'}</div><div class="rc-body">${msg}</div>`;
+  card.innerHTML = `
+    <div class="rc-header ${urgent ? 'urgent' : 'normal'}">
+      ${urgent ? '🚨 REPORTE URGENTE' : '📋 REPORTE LISTO'}
+    </div>
+    <div class="rc-body">${msg}</div>`;
+
   const copyBtn = document.createElement('button');
   copyBtn.className = 'copy-btn';
   copyBtn.textContent = '📋 Copiar y pegar en WhatsApp';
   copyBtn.onclick = () => {
     navigator.clipboard.writeText(msg).then(() => {
-      copyBtn.textContent = '✅ ¡Copiado!';
+      copyBtn.textContent = '✅ ¡Copiado! Ahora pégalo en WhatsApp';
       copyBtn.classList.add('done');
-      setTimeout(() => { copyBtn.textContent = '📋 Copiar y pegar en WhatsApp'; copyBtn.classList.remove('done'); }, 3000);
+      setTimeout(() => {
+        copyBtn.textContent = '📋 Copiar y pegar en WhatsApp';
+        copyBtn.classList.remove('done');
+      }, 3500);
     });
   };
+
   const resetBtn = document.createElement('button');
   resetBtn.className = 'reset-btn';
   resetBtn.textContent = '+ Nuevo reporte';
   resetBtn.onclick = resetAll;
-  inner.appendChild(card); inner.appendChild(copyBtn); inner.appendChild(resetBtn);
-  rWrap.innerHTML = '<div class="bot-avatar">🤖</div>';
-  rWrap.appendChild(inner);
-  chat.appendChild(rWrap);
+
+  const inner = document.createElement('div');
+  inner.style.cssText = 'max-width:88%;';
+  inner.appendChild(card);
+  inner.appendChild(copyBtn);
+  inner.appendChild(resetBtn);
+
+  wrap.innerHTML = '<div class="bot-avatar">🤖</div>';
+  wrap.appendChild(inner);
+  chat.appendChild(wrap);
 
   // Destination card
   setTimeout(() => {
+    const grupo = urgent ? CONFIG.grupos.urgente : CONFIG.grupos.normal;
     const dWrap = document.createElement('div');
     dWrap.className = 'bubble-wrap bot';
-    const dInner = document.createElement('div');
-    dInner.style.maxWidth = '88%';
+    dWrap.style.animation = 'fadeUp 0.25s ease';
+
     const dCard = document.createElement('div');
     dCard.className = 'dest-card';
     dCard.innerHTML = `
-      <div class="dc-header ${urgent?'urg':'norm'}">${urgent?'🚨':'📲'} Manda el reporte a este grupo:</div>
+      <div class="dc-header ${urgent ? 'urg' : 'norm'}">
+        ${urgent ? '🚨 Manda el reporte a este grupo:' : '📲 Manda el reporte a este grupo:'}
+      </div>
       <div class="dc-body">
-        <div class="dest-item ${urgent?'urg':'norm'}">
+        <div class="dest-item ${urgent ? 'urg' : 'norm'}">
           <div class="dest-icon">${grupo.emoji}</div>
           <div>
-            <div class="dest-label">${urgent?'Grupo urgente':'Grupo operativo'}</div>
+            <div class="dest-label">${urgent ? 'Grupo urgente' : 'Grupo operativo'}</div>
             <div class="dest-name">${grupo.nombre}</div>
             <div class="dest-sub">${grupo.descripcion}</div>
           </div>
         </div>
       </div>`;
+
+    const dInner = document.createElement('div');
+    dInner.style.cssText = 'max-width:88%;';
     dInner.appendChild(dCard);
+
     dWrap.innerHTML = '<div class="bot-avatar">🤖</div>';
     dWrap.appendChild(dInner);
     chat.appendChild(dWrap);
     scrollChat();
-  }, 500);
+  }, 600);
 }
 
+// ─── Reset ────────────────────────────────────────────────────
 function resetAll() {
   history.length = 0;
+  Object.keys(DATA).forEach(k => delete DATA[k]);
+  window._lastKey = null;
+  reporteDone = false;
   document.getElementById('chat').innerHTML = '';
   clearInput();
-  start();
+  setPill('—');
+  startChat();
 }
 
-function buildSystem() {
-  return `Eres un asistente que ayuda a los empleados de "${CONFIG.nombrePropiedad}" a redactar reportes de incidentes completos.
-
-CONTEXTO DE LA PROPIEDAD:
-${CONFIG.contexto}
-
-TU ÚNICO TRABAJO:
-Hacer preguntas hasta tener TODA la información necesaria para que el dueño Carlos pueda actuar. No tomas decisiones, no das opiniones, no sugieres soluciones. Solo recolectas información.
-
-La información que SIEMPRE necesitas antes de generar el reporte:
-1. Quién reporta
-2. Qué pasó exactamente (específico, no vago)
-3. Dónde exactamente (estructura y área específica)
-4. Cuándo ocurrió o fue notado
-5. Quién estuvo involucrado
-6. Si los huéspedes ya se quejaron o no (si aplica)
-7. Qué ya intentaron
-8. Si hay foto o video (si es algo físico)
-9. Qué necesitan de Carlos (solo informar, autorización de pago con monto, decisión, etc.)
-
-REGLAS:
-- Responde SIEMPRE en JSON válido. Nunca texto libre.
-- Haz UNA sola pregunta a la vez.
-- Las preguntas deben ser cortas y directas. Sin explicaciones largas.
-- Si una respuesta es vaga o incompleta, pide que la detallen. Ejemplo: si dicen "hay un problema con el aire" pregunta "¿qué le pasa exactamente al aire y en qué recámara?"
-- NO sugieras soluciones ni tomes decisiones.
-- Cuando tengas TODA la información necesaria genera el reporte.
-
-FORMATO DE RESPUESTA JSON:
-
-Pregunta con opciones:
-{"type":"question","text":"¿texto de la pregunta?","options":["op1","op2","op3"]}
-
-Pregunta de texto libre:
-{"type":"question","text":"¿texto de la pregunta?","placeholder":"ejemplo de respuesta"}
-
-Reporte completo:
-{"type":"report","urgent":true/false,"reporte":"texto completo del reporte con todos los datos recopilados, formato limpio con emojis y saltos de línea"}
-
-Error:
-{"type":"error","message":"texto"}`;
-}
-
-async function start() {
+// ─── Start ────────────────────────────────────────────────────
+async function startChat() {
   setStatus('En línea');
-  isLoading = true;
-  showTyping();
-  history.push({ role: 'user', content: 'Hola, necesito hacer un reporte.' });
+  const reply = await askClaude(`Hola. Soy un empleado de ${CONFIG.nombrePropiedad} y necesito hacer un reporte de un incidente.`);
+
+  let parsed;
   try {
-    const res = await fetch('/.netlify/functions/claude', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system: buildSystem(), messages: history })
-    });
-    const data = await res.json();
-    const reply = data?.content?.[0]?.text || '';
-    history.push({ role: 'assistant', content: reply });
-    hideTyping();
-    isLoading = false;
-    handleReply(reply);
+    parsed = JSON.parse(reply.replace(/```json|```/g,'').trim());
   } catch(e) {
-    hideTyping();
-    isLoading = false;
-    addBotBubble('Error de conexión.');
+    addBotBubble('Hola 👋 ¿Tú quién eres?');
+    renderOptions(CONFIG.empleados);
+    return;
   }
+  handleResponse(parsed);
 }
 
-start();
+startChat();
 </script>
 </body>
 </html>

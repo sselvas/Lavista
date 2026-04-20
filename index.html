@@ -3,589 +3,336 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Entrenamiento La Vista</title>
+<title>Ayuda para reportes La Vista</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
-
-:root {
-  --bg: #f7f5f0;
-  --card: #ffffff;
-  --text: #1a1a1a;
-  --muted: #888;
-  --border: #e8e4dc;
-  --accent: #1a1a1a;
-  --pass: #16a34a;
-  --pass-bg: #f0fdf4;
-  --fail: #ca8a04;
-  --fail-bg: #fefce8;
-  --scenario-bg: #1a1a1a;
-  --scenario-text: #ffffff;
-  --pill-bg: #e8e4dc;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; }
-
-body {
-  background: var(--bg);
-  font-family: 'DM Sans', sans-serif;
-  color: var(--text);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-/* ── Header ── */
-.header {
-  padding: 20px 20px 16px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
-  flex-shrink: 0;
-}
-
-.header-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
-}
-
-.header-title {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.scenario-pill {
-  background: var(--pill-bg);
-  border-radius: 20px;
-  padding: 4px 12px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--muted);
-  font-family: 'DM Mono', monospace;
-}
-
-/* Progress dots */
-.progress-dots {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-
-.pdot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--border);
-  transition: all 0.3s ease;
-}
-
-.pdot.done { background: var(--pass); }
-.pdot.active { background: var(--accent); transform: scale(1.3); }
-
-/* ── Main content ── */
-.main {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* ── Cards ── */
-.scenario-card {
-  background: var(--scenario-bg);
-  color: var(--scenario-text);
-  border-radius: 16px;
-  padding: 20px;
-  animation: slideIn 0.3s ease;
-}
-
-.scenario-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  opacity: 0.5;
-  margin-bottom: 10px;
-  font-family: 'DM Mono', monospace;
-}
-
-.scenario-text {
-  font-size: 15px;
-  line-height: 1.6;
-  font-weight: 500;
-}
-
-.feedback-card {
-  border-radius: 14px;
-  padding: 16px 18px;
-  animation: slideIn 0.3s ease;
-  border: 1.5px solid;
-}
-
-.feedback-card.pass {
-  background: var(--pass-bg);
-  border-color: #86efac;
-}
-
-.feedback-card.fail {
-  background: var(--fail-bg);
-  border-color: #fde68a;
-}
-
-.feedback-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-  font-family: 'DM Mono', monospace;
-}
-
-.feedback-card.pass .feedback-label { color: var(--pass); }
-.feedback-card.fail .feedback-label { color: var(--fail); }
-
-.feedback-text {
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text);
-}
-
-.user-response {
-  background: var(--card);
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-  padding: 14px 16px;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text);
-  animation: slideIn 0.2s ease;
-  align-self: flex-end;
-  max-width: 90%;
-}
-
-.complete-card {
-  background: var(--pass);
-  color: white;
-  border-radius: 16px;
-  padding: 28px 20px;
-  text-align: center;
-  animation: slideIn 0.3s ease;
-}
-
-.complete-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
-.complete-card p { font-size: 14px; opacity: 0.85; line-height: 1.6; }
-
-.message-card {
-  background: var(--card);
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-  padding: 16px 18px;
-  font-size: 14px;
-  line-height: 1.6;
-  animation: slideIn 0.3s ease;
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ── Input area ── */
-.input-area {
-  flex-shrink: 0;
-  padding: 12px 20px 24px;
-  border-top: 1px solid var(--border);
-  background: var(--bg);
-}
-
-textarea {
-  width: 100%;
-  border: 2px solid var(--border);
-  border-radius: 14px;
-  padding: 14px 16px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
-  background: var(--card);
-  resize: none;
-  outline: none;
-  min-height: 52px;
-  max-height: 140px;
-  line-height: 1.5;
-  color: var(--text);
-  transition: border-color 0.15s;
-}
-
-textarea:focus { border-color: var(--accent); }
-
-.send-btn {
-  width: 100%;
-  margin-top: 10px;
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 14px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-
-.send-btn:active { opacity: 0.85; }
-.send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-.next-btn {
-  width: 100%;
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 14px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-
-.next-btn:active { opacity: 0.85; }
-
-.restart-btn {
-  width: 100%;
-  margin-top: 12px;
-  background: transparent;
-  color: white;
-  border: 2px solid rgba(255,255,255,0.4);
-  border-radius: 12px;
-  padding: 12px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* Loading dots inline */
-.loading {
-  display: flex;
-  gap: 5px;
-  padding: 14px 18px;
-  background: var(--card);
-  border-radius: 14px;
-  border: 1.5px solid var(--border);
-  width: fit-content;
-  animation: slideIn 0.2s ease;
-}
-
-.loading span {
-  width: 7px; height: 7px;
-  background: var(--muted);
-  border-radius: 50%;
-  animation: bounce 1.2s infinite;
-}
-.loading span:nth-child(2) { animation-delay: 0.2s; }
-.loading span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap');
+  :root {
+    --bg: #e5ddd5;
+    --bubble-bot: #ffffff;
+    --bubble-user: #dcf8c6;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #d1d5db;
+    --primary: #075e54;
+    --primary-light: #128c7e;
+    --danger: #e02424;
+    --success: #057a55;
+    --warning: #d97706;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    background: var(--bg);
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23c4b5a5' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    font-family: 'Nunito', sans-serif;
+    display: flex; flex-direction: column;
+  }
+  .header {
+    background: var(--primary); color: white;
+    padding: 12px 16px; display: flex; align-items: center; gap: 12px;
+    flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.25); z-index: 10; position: relative;
+  }
+  .avatar { width: 40px; height: 40px; background: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .header-info h1 { font-size: 15px; font-weight: 800; }
+  .header-info p { font-size: 11px; opacity: 0.75; margin-top: 1px; }
+  .progress-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: rgba(255,255,255,0.2); }
+  .progress-fill { height: 3px; background: white; transition: width 0.5s ease; }
+  .chat { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 14px 12px; display: flex; flex-direction: column; gap: 4px; }
+  .input-area { flex-shrink: 0; background: #d0c8be; border-top: 1px solid #b8b0a6; padding: 10px 12px 16px; min-height: 70px; max-height: 220px; overflow-y: auto; }
+  .bubble-wrap { display: flex; align-items: flex-end; gap: 6px; animation: fadeUp 0.2s ease; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  .bubble-wrap.bot { justify-content: flex-start; }
+  .bubble-wrap.user { justify-content: flex-end; }
+  .bot-avatar { width: 26px; height: 26px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; margin-bottom: 2px; }
+  .bubble { max-width: 82%; padding: 9px 12px; border-radius: 16px; font-size: 14px; line-height: 1.5; box-shadow: 0 1px 2px rgba(0,0,0,0.1); word-break: break-word; }
+  .bubble.bot { background: var(--bubble-bot); border-bottom-left-radius: 3px; color: var(--text); }
+  .bubble.user { background: var(--bubble-user); border-bottom-right-radius: 3px; color: var(--text); }
+  .bubble .time { font-size: 10px; color: var(--muted); text-align: right; margin-top: 4px; }
+  .bubble strong { font-weight: 800; }
+  .bubble.feedback-good { background: #dcf8c6; border: 2px solid var(--success); }
+  .bubble.feedback-bad  { background: #fef3c7; border: 2px solid var(--warning); }
+  .bubble.scenario { background: #f0f4ff; border: 2px solid #6366f1; }
+  .scenario-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #6366f1; margin-bottom: 6px; }
+  .typing-wrap { display: flex; align-items: flex-end; gap: 6px; }
+  .typing-dots { background: white; border-radius: 16px; padding: 10px 14px; display: flex; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+  .dot { width: 7px; height: 7px; background: #aaa; border-radius: 50%; animation: bounce 1.2s infinite; }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%,60%,100%{transform:translateY(0);} 30%{transform:translateY(-5px);} }
+  .options-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+  .opt { background: white; border: 2px solid var(--border); border-radius: 20px; padding: 9px 15px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .opt:active { transform: scale(0.95); }
+  .text-row { display: flex; gap: 8px; align-items: flex-end; }
+  .text-row textarea { flex: 1; border: 2px solid var(--border); border-radius: 22px; padding: 10px 15px; font-family: 'Nunito', sans-serif; font-size: 15px; background: white; resize: none; outline: none; min-height: 44px; max-height: 130px; overflow-y: auto; line-height: 1.4; }
+  .text-row textarea:focus { border-color: var(--primary); }
+  .send-btn { width: 44px; height: 44px; flex-shrink: 0; background: var(--primary); border: none; border-radius: 50%; color: white; font-size: 18px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+  .send-btn:active { opacity: 0.85; }
+  .complete-card { background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.12); max-width: 88%; margin: 2px 0; }
+  .complete-header { background: var(--success); padding: 14px; color: white; font-weight: 900; font-size: 16px; text-align: center; }
+  .complete-body { padding: 16px; font-size: 14px; line-height: 1.7; color: var(--text); text-align: center; }
+  .restart-btn { display: block; width: 100%; margin-top: 8px; background: white; color: var(--primary); border: 2px solid var(--primary); border-radius: 12px; padding: 11px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; max-width: 88%; }
 </style>
 </head>
 <body>
 
 <script>
-// ── CONFIGURATION ──────────────────────────────────────────
-const PROPERTY = "La Vista";
-const NETLIFY_FN = "/.netlify/functions/Claude";
+const CONFIG = {
+  nombrePropiedad: "La Vista",
+  empleados: ["Fabián","Enrique","Abraham","Dulce","Jaqueline","Karla"],
+  totalScenarios: 5,
+  contexto: `
+La Vista es una casa de renta vacacional con acceso al lago.
+Estructuras: Casa principal, Casa del lago (también "casa de la playa"), Casa de visitas, Bungalow, área exterior.
+Proveedores: Miguel (plomería, electricidad, aires), Anuar (backup Miguel), Antonio (carpintería), Ongay (plomería especializada).
+Internet: Infinitum (principal) + Starlink (respaldo).
+Jacuzzi temperatura normal: 35C. Aires acondicionados son lo más importante junto con el jacuzzi.
+Dueño: Carlos Sebastian. Nunca toma decisiones por él.
 
-const SCENARIOS = [
-  {
-    id: 1,
-    situation: "Estás trabajando en la casa principal. Son las 3pm, hay huéspedes adentro. Una señora se te acerca y te dice que el aire de su cuarto no enfría desde que llegaron esta mañana.\n\nEscribe el reporte que le mandarías a Carlos por WhatsApp.",
-    required: ["quién reporta","recámara o cuarto específico","desde cuándo","huéspedes se quejaron","qué intentaron o si ya le hablaron a alguien"]
-  },
-  {
-    id: 2,
-    situation: "Son las 9pm. Llegan 5 personas al portón que dicen tener reservación. La reserva que Carlos te dio era para 10 personas y ya tienes 10 adentro. Estas 5 extra no estaban en la lista.\n\nEscribe el reporte que le mandarías a Carlos.",
-    required: ["quién reporta","cuántas personas extra","qué hora es","qué hicieron — las dejaron entrar o no","qué necesitan que decida Carlos"]
-  },
-  {
-    id: 3,
-    situation: "Se fue la luz en toda la casa. Son las 7pm, hay huéspedes. Te asomas afuera y ves que los vecinos sí tienen luz.\n\nEscribe el reporte.",
-    required: ["quién reporta","solo en la casa o general","si los vecinos tienen luz","si los huéspedes ya se quejaron","qué revisaron — tablero, breakers"]
-  },
-  {
-    id: 4,
-    situation: "Miguel vino hoy a arreglar la fuga de la tarja de la cocina. Te dijo que ya quedó y se fue. No te cobró nada, dijo que le hablen a Carlos para el pago.\n\nEscribe el reporte.",
-    required: ["quién reporta","qué arregló Miguel","si quedó bien o no","que no cobró","cuánto crees que fue o que hay que preguntarle a Carlos"]
-  },
-  {
-    id: 5,
-    situation: "Los huéspedes se acaban de ir. Estás limpiando la alberca y encuentras un vaso de vidrio roto en el fondo. La casa está vacía.\n\nEscribe el reporte.",
-    required: ["quién reporta","qué encontraron exactamente","dónde exactamente","si hay foto","si necesitan algo de Carlos o solo están informando"]
-  }
-];
-
-const SYSTEM_PROMPT = `Eres un entrenador que evalúa reportes de empleados de "${PROPERTY}".
-
-Un reporte completo incluye:
+Un reporte completo siempre incluye:
 1. Quién reporta
 2. Qué pasó exactamente (específico, no vago)
-3. Dónde exactamente
-4. Cuándo ocurrió
+3. Dónde exactamente (estructura + área específica)
+4. Cuándo ocurrió o fue notado
 5. Quién estuvo involucrado
-6. Si los huéspedes se quejaron (cuando aplica)
-7. Qué ya intentaron
-8. Si hay foto (cuando es algo físico)
-9. Qué necesitan del dueño Carlos
-
-Cuando evalúes un reporte:
-- Si tiene toda la información necesaria: apruébalo con un comentario breve y positivo.
-- Si le falta información: di EXACTAMENTE qué falta en una sola oración directa. No des la respuesta correcta. No hagas listas largas. Solo di qué es lo más importante que falta.
-
-Responde SOLO en JSON. Sin markdown. Sin texto libre.
-
-Si el reporte está completo:
-{"passed": true, "feedback": "una línea de qué estuvo bien"}
-
-Si falta información:
-{"passed": false, "feedback": "exactamente qué falta y por qué importa — máximo 2 oraciones"}`;
+6. Si los huéspedes ya se quejaron o no (cuando aplica)
+7. Qué ya intentaron hacer
+8. Si hay foto o video (cuando es algo físico)
+9. Qué necesitan de Carlos (solo informar / autorización de pago con monto / que tome una decisión)
+`
+};
 </script>
 
 <div class="header">
-  <div class="header-top">
-    <div class="header-title">Entrenamiento La Vista</div>
-    <div class="scenario-pill" id="pill">Inicio</div>
+  <div class="avatar">📋</div>
+  <div class="header-info">
+    <h1>Ayuda para reportes La Vista</h1>
+    <p id="status-text">Entrenamiento</p>
   </div>
-  <div class="progress-dots" id="progress-dots"></div>
+  <div style="margin-left:auto;font-size:12px;font-weight:800;opacity:0.9" id="progress-text"></div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
 </div>
 
-<div class="main" id="main"></div>
-
+<div class="chat" id="chat"></div>
 <div class="input-area" id="input-area"></div>
 
 <script>
-let currentScenario = 0;
+const history = [];
 let busy = false;
+let scenarioCount = 0;
 
-// ── Progress ──────────────────────────────────────────────
-function buildDots() {
-  const d = document.getElementById('progress-dots');
-  d.innerHTML = '';
-  SCENARIOS.forEach((_, i) => {
-    const dot = document.createElement('div');
-    dot.className = 'pdot';
-    dot.id = `dot-${i}`;
-    d.appendChild(dot);
+function now() { return new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}); }
+function scrollBot() { requestAnimationFrame(()=>requestAnimationFrame(()=>{ const c=document.getElementById('chat'); c.scrollTop=c.scrollHeight; })); }
+function setStatus(t) { document.getElementById('status-text').textContent=t; }
+function clearInput() { document.getElementById('input-area').innerHTML=''; }
+
+function updateProgress(n) {
+  const pct = Math.round((n / CONFIG.totalScenarios) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = n > 0 ? `${n}/${CONFIG.totalScenarios}` : '';
+}
+
+function botBubble(html, cls) {
+  const c=document.getElementById('chat');
+  const w=document.createElement('div'); w.className='bubble-wrap bot';
+  const bubble = `<div class="bubble bot${cls?' '+cls:''}">${html.replace(/\n/g,'<br>')}<div class="time">${now()}</div></div>`;
+  w.innerHTML=`<div class="bot-avatar">📋</div>${bubble}`;
+  c.appendChild(w); scrollBot();
+}
+
+function userBubble(text) {
+  const c=document.getElementById('chat');
+  const w=document.createElement('div'); w.className='bubble-wrap user';
+  w.innerHTML=`<div class="bubble user">${text}<div class="time">${now()}</div></div>`;
+  c.appendChild(w); scrollBot();
+}
+
+function showDots() {
+  const c=document.getElementById('chat');
+  const t=document.createElement('div'); t.className='typing-wrap'; t.id='typing';
+  t.innerHTML=`<div class="bot-avatar">📋</div><div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  c.appendChild(t); scrollBot();
+}
+function hideDots() { const t=document.getElementById('typing'); if(t) t.remove(); }
+
+function renderOpts(opts) {
+  clearInput();
+  const a=document.getElementById('input-area');
+  const w=document.createElement('div'); w.className='options-wrap';
+  opts.forEach(o=>{
+    const b=document.createElement('button'); b.className='opt'; b.textContent=o;
+    b.onclick=()=>{ if(!busy) send(o); };
+    w.appendChild(b);
   });
+  a.appendChild(w); scrollBot();
 }
 
-function updateDots(active) {
-  SCENARIOS.forEach((_, i) => {
-    const dot = document.getElementById(`dot-${i}`);
-    if (!dot) return;
-    dot.className = 'pdot' + (i < active ? ' done' : i === active ? ' active' : '');
-  });
-  const pill = document.getElementById('pill');
-  if (active >= SCENARIOS.length) {
-    pill.textContent = '✓ Completo';
-  } else {
-    pill.textContent = `${active + 1} / ${SCENARIOS.length}`;
-  }
-}
-
-// ── DOM helpers ───────────────────────────────────────────
-function scrollMain() {
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    const m = document.getElementById('main');
-    m.scrollTop = m.scrollHeight;
-  }));
-}
-
-function clearInput() { document.getElementById('input-area').innerHTML = ''; }
-
-function addCard(html, cls) {
-  const m = document.getElementById('main');
-  const div = document.createElement('div');
-  div.className = cls;
-  div.innerHTML = html;
-  m.appendChild(div);
-  scrollMain();
-  return div;
-}
-
-function showLoading() {
-  const m = document.getElementById('main');
-  const d = document.createElement('div');
-  d.className = 'loading'; d.id = 'loading';
-  d.innerHTML = '<span></span><span></span><span></span>';
-  m.appendChild(d); scrollMain();
-}
-function hideLoading() { const l = document.getElementById('loading'); if(l) l.remove(); }
-
-function showTextInput(ph) {
+function renderText(ph) {
   clearInput();
-  const area = document.getElementById('input-area');
-  const ta = document.createElement('textarea');
-  ta.placeholder = ph || 'Escribe tu reporte...';
-  ta.id = 'report-input';
-  ta.oninput = () => { ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight,140)+'px'; };
-
-  const btn = document.createElement('button');
-  btn.className = 'send-btn';
-  btn.textContent = 'Enviar reporte';
-  btn.onclick = () => {
-    if (busy) return;
-    const v = ta.value.trim();
-    if (!v) return;
-    submitReport(v);
-  };
-
-  ta.onkeydown = e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault(); btn.onclick();} };
-
-  area.appendChild(ta); area.appendChild(btn);
-  setTimeout(() => ta.focus(), 150);
-  scrollMain();
+  const a=document.getElementById('input-area');
+  const row=document.createElement('div'); row.className='text-row';
+  const ta=document.createElement('textarea'); ta.placeholder=ph||'Escribe tu reporte aquí...';
+  ta.oninput=()=>{ ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight,130)+'px'; scrollBot(); };
+  ta.onkeydown=e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();go();} };
+  const btn=document.createElement('button'); btn.className='send-btn'; btn.innerHTML='➤';
+  btn.onclick=go;
+  function go(){ if(busy) return; const v=ta.value.trim(); if(!v) return; send(v); }
+  row.appendChild(ta); row.appendChild(btn); a.appendChild(row);
+  setTimeout(()=>ta.focus(),150); scrollBot();
 }
 
-function showNextBtn(label, fn) {
+async function send(val) {
+  userBubble(val);
   clearInput();
-  const area = document.getElementById('input-area');
-  const btn = document.createElement('button');
-  btn.className = 'next-btn';
-  btn.textContent = label;
-  btn.onclick = fn;
-  area.appendChild(btn);
-}
-
-// ── Flow ──────────────────────────────────────────────────
-function start() {
-  document.getElementById('main').innerHTML = '';
-  clearInput();
-  currentScenario = 0;
-  buildDots();
-  updateDots(0);
-
-  addCard(`
-    <strong>Bienvenido al entrenamiento de reportes.</strong><br><br>
-    Vas a ver 5 situaciones reales que pasan en La Vista. Para cada una vas a escribir el reporte como si se lo mandaras a Carlos por WhatsApp.<br><br>
-    Si falta información, te voy a decir exactamente qué faltó y lo intentas de nuevo.
-  `, 'message-card');
-
-  showNextBtn('Empezar →', showCurrentScenario);
-}
-
-function showCurrentScenario() {
-  if (currentScenario >= SCENARIOS.length) { showComplete(); return; }
-  const s = SCENARIOS[currentScenario];
-  updateDots(currentScenario);
-
-  addCard(`
-    <div class="scenario-label">Escenario ${s.id} de ${SCENARIOS.length}</div>
-    <div class="scenario-text">${s.situation.replace(/\n/g,'<br>')}</div>
-  `, 'scenario-card');
-
-  showTextInput('Escribe tu reporte como lo mandarías por WhatsApp...');
-}
-
-async function submitReport(text) {
-  busy = true;
-
-  // Show user response
-  const userDiv = document.createElement('div');
-  userDiv.className = 'user-response';
-  userDiv.textContent = text;
-  document.getElementById('main').appendChild(userDiv);
-  scrollMain();
-
-  clearInput();
-  showLoading();
-
-  const s = SCENARIOS[currentScenario];
-  const userMsg = `Escenario: "${s.situation}"\n\nReporte del empleado: "${text}"\n\nInformación requerida para este escenario: ${s.required.join(', ')}`;
+  busy=true; setStatus('Revisando...');
+  showDots();
+  history.push({role:'user',content:val});
 
   try {
-    const res = await fetch(NETLIFY_FN, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: userMsg }]
-      })
+    const res=await fetch('/.netlify/functions/Claude',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({system:buildSystem(),messages:history})
     });
-
-    const data = await res.json();
-    const raw = data?.content?.[0]?.text || '';
-    hideLoading();
-    busy = false;
-
-    let parsed;
-    try {
-      parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
-    } catch(e) {
-      // Fallback: show raw text as feedback
-      addCard(`<div class="feedback-label">Revisión</div><div class="feedback-text">${raw}</div>`, 'feedback-card fail');
-      showTextInput('Inténtalo de nuevo...');
-      return;
-    }
-
-    if (parsed.passed) {
-      addCard(`
-        <div class="feedback-label">✓ Aprobado</div>
-        <div class="feedback-text">${parsed.feedback}</div>
-      `, 'feedback-card pass');
-
-      currentScenario++;
-      updateDots(currentScenario);
-
-      if (currentScenario >= SCENARIOS.length) {
-        setTimeout(showComplete, 600);
-      } else {
-        showNextBtn(`Siguiente escenario →`, showCurrentScenario);
-      }
-    } else {
-      addCard(`
-        <div class="feedback-label">⚠ Falta información</div>
-        <div class="feedback-text">${parsed.feedback}</div>
-      `, 'feedback-card fail');
-      showTextInput('Inténtalo de nuevo...');
-    }
-
+    const data=await res.json();
+    const raw=data?.content?.[0]?.text||'';
+    history.push({role:'assistant',content:raw});
+    hideDots(); busy=false; setStatus('Entrenamiento');
+    process(raw);
   } catch(e) {
-    hideLoading();
-    busy = false;
-    addCard(`<div class="feedback-label">Error</div><div class="feedback-text">No se pudo conectar. Intenta de nuevo.</div>`, 'feedback-card fail');
-    showTextInput('Inténtalo de nuevo...');
+    hideDots(); busy=false; setStatus('Entrenamiento');
+    botBubble('Error de conexión. Intenta de nuevo.');
+    renderOpts(['Reintentar']);
   }
 }
 
-function showComplete() {
-  clearInput();
-  const m = document.getElementById('main');
-  updateDots(SCENARIOS.length);
+function process(raw) {
+  const clean = raw.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
+  let p;
+  try { p=JSON.parse(clean); }
+  catch(e) {
+    botBubble(raw.trim());
+    renderText('Escribe aquí...');
+    return;
+  }
 
-  const card = document.createElement('div');
-  card.className = 'complete-card';
-  card.innerHTML = `
-    <h2>Entrenamiento completado</h2>
-    <p>Ya sabes qué información necesita Carlos para poder actuar. Un reporte completo le ahorra tiempo a todos.</p>
-  `;
-  m.appendChild(card);
+  if (p.type === 'scenario') {
+    scenarioCount++;
+    updateProgress(scenarioCount - 1);
+    // Scenario bubble with special style
+    const c=document.getElementById('chat');
+    const w=document.createElement('div'); w.className='bubble-wrap bot';
+    w.innerHTML=`<div class="bot-avatar">📋</div><div class="bubble bot scenario"><div class="scenario-label">📍 Escenario ${scenarioCount} de ${CONFIG.totalScenarios}</div>${p.text.replace(/\n/g,'<br>')}<div class="time">${now()}</div></div>`;
+    c.appendChild(w); scrollBot();
+    renderText('Escribe tu reporte aquí...');
 
-  const area = document.getElementById('input-area');
-  area.innerHTML = '';
-  const btn = document.createElement('button');
-  btn.className = 'restart-btn';
-  btn.style.cssText = 'width:100%;margin-top:0;background:transparent;color:#16a34a;border:2px solid #86efac;border-radius:12px;padding:12px;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;cursor:pointer;';
-  btn.textContent = 'Practicar de nuevo';
-  btn.onclick = start;
-  area.appendChild(btn);
-  scrollMain();
+  } else if (p.type === 'feedback') {
+    const cls = p.passed ? 'feedback-good' : 'feedback-bad';
+    botBubble((p.passed ? '✅ ' : '⚠️ ') + p.text, cls);
+    if (p.passed) {
+      setTimeout(()=>{ renderOpts(['Siguiente escenario →']); },400);
+    } else {
+      renderText('Inténtalo de nuevo...');
+    }
+
+  } else if (p.type === 'message') {
+    botBubble(p.text);
+    if (p.options) renderOpts(p.options);
+    else renderText(p.placeholder || 'Escribe aquí...');
+
+  } else if (p.type === 'complete') {
+    updateProgress(CONFIG.totalScenarios);
+    showComplete(p.text);
+
+  } else {
+    botBubble(raw.trim());
+    renderText('Escribe aquí...');
+  }
 }
 
-start();
+function showComplete(msg) {
+  clearInput();
+  const chat=document.getElementById('chat');
+  const w=document.createElement('div'); w.className='bubble-wrap bot';
+  const inner=document.createElement('div'); inner.style.maxWidth='88%';
+  const card=document.createElement('div'); card.className='complete-card';
+  card.innerHTML=`<div class="complete-header">🎉 Entrenamiento completado</div><div class="complete-body">${(msg||'Completaste todos los escenarios. Ya sabes cómo hacer un reporte completo.').replace(/\n/g,'<br>')}</div>`;
+  inner.appendChild(card);
+  const rb=document.createElement('button'); rb.className='restart-btn'; rb.textContent='Volver a practicar';
+  rb.onclick=resetAll; inner.appendChild(rb);
+  w.innerHTML='<div class="bot-avatar">📋</div>'; w.appendChild(inner);
+  chat.appendChild(w); scrollBot();
+}
+
+function resetAll() {
+  history.length=0; scenarioCount=0;
+  document.getElementById('chat').innerHTML='';
+  clearInput(); updateProgress(0);
+  init();
+}
+
+function buildSystem() {
+  return `Eres un entrenador que enseña a los empleados de "${CONFIG.nombrePropiedad}" cómo hacer reportes completos para el dueño Carlos Sebastian.
+
+CONTEXTO DE LA PROPIEDAD Y QUÉ ES UN REPORTE COMPLETO:
+${CONFIG.contexto}
+
+TU TRABAJO:
+Presentar exactamente ${CONFIG.totalScenarios} escenarios reales uno por uno. El empleado escribe el reporte como si lo mandara por WhatsApp. Tú lo evalúas y le dices qué faltó o qué estuvo mal. Si falta información, el empleado lo intenta de nuevo hasta que el reporte quede completo. Cuando pasa, avanzas al siguiente escenario.
+
+ESCENARIOS QUE DEBES USAR (en este orden):
+1. El aire acondicionado de la recámara 3 de la casa principal no enfría. Hay huéspedes adentro que ya se quejaron.
+2. Llegaron 6 personas más de las que estaban en la reserva. Son las 8pm y los huéspedes ya están adentro.
+3. Se fue la luz solo en La Vista, los vecinos sí tienen luz. Hay huéspedes adentro.
+4. Miguel vino a arreglar una fuga en la cocina, dijo que quedó pero no cobró todavía. Ya se fue.
+5. Dulce encontró un vaso roto en la alberca al limpiar después de que se fueron los huéspedes. No hay nadie en la casa.
+
+REGLAS:
+- Responde SIEMPRE en JSON válido. Sin texto libre. Sin markdown.
+- Un solo paso a la vez.
+- Al evaluar un reporte: sé directo. Di exactamente qué faltó y por qué importa. No des el reporte correcto tú — haz que el empleado lo escriba bien.
+- Si el reporte tiene todo lo necesario, márcalo como pasado.
+- Después de los ${CONFIG.totalScenarios} escenarios genera el mensaje de completado.
+
+FORMATO JSON:
+
+Presentar escenario:
+{"type":"scenario","text":"Descripción del escenario en segunda persona, como si le estuviera pasando a ellos ahora mismo. Termina con: Escribe el reporte como lo mandarías por WhatsApp."}
+
+Feedback — reporte incompleto:
+{"type":"feedback","passed":false,"text":"Qué faltó específicamente y por qué importa ese dato. Máximo 3 líneas. Sin listar todo lo que falta, solo lo más importante que falta."}
+
+Feedback — reporte aprobado:
+{"type":"feedback","passed":true,"text":"Qué estuvo bien. Una sola línea positiva y concreta."}
+
+Mensaje general (bienvenida, transición):
+{"type":"message","text":"texto","options":["op1"]}
+
+Entrenamiento completado (después del escenario ${CONFIG.totalScenarios}):
+{"type":"complete","text":"Mensaje de cierre. Breve. Menciona que ya saben lo que Carlos necesita para poder actuar."}`;
+}
+
+async function init() {
+  setStatus('Entrenamiento');
+  busy=true; showDots();
+  history.push({role:'user',content:'Hola, soy un empleado nuevo de La Vista.'});
+  try {
+    const res=await fetch('/.netlify/functions/Claude',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({system:buildSystem(),messages:history})
+    });
+    const data=await res.json();
+    const raw=data?.content?.[0]?.text||'';
+    history.push({role:'assistant',content:raw});
+    hideDots(); busy=false;
+    process(raw);
+  } catch(e) {
+    hideDots(); busy=false;
+    botBubble('Error de conexión.');
+  }
+}
+
+init();
 </script>
 </body>
 </html>

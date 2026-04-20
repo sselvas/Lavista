@@ -1,15 +1,16 @@
-export async function onRequestPost(context) {
-  const apiKey = context.env.ANTHROPIC_API_KEY;
+exports.handler = async function(event) {
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
+  }
 
+  const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    return new Response(JSON.stringify({ error: 'API key no configurada' }), {
-      status: 500, headers: { 'Content-Type': 'application/json' }
-    });
+    return { statusCode: 500, body: JSON.stringify({ error: 'API key no configurada' }) };
   }
 
   let body;
-  try { body = await context.request.json(); }
-  catch(e) { return new Response(JSON.stringify({ error: 'JSON invalido' }), { status: 400, headers: { 'Content-Type': 'application/json' } }); }
+  try { body = JSON.parse(event.body); }
+  catch(e) { return { statusCode: 400, body: JSON.stringify({ error: 'JSON invalido' }) }; }
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -27,8 +28,8 @@ export async function onRequestPost(context) {
       })
     });
     const data = await response.json();
-    return new Response(JSON.stringify(data), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) };
   } catch(e) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    return { statusCode: 500, body: JSON.stringify({ error: e.message }) };
   }
-}
+};

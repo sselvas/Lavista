@@ -443,7 +443,7 @@ async function askClaude(userMsg) {
   history.push({ role: 'user', content: userMsg });
 
   try {
-    const res = await fetch('/.netlify/functions/claude', {
+    const res = await fetch('/.netlify/functions/Claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

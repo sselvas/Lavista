@@ -426,7 +426,7 @@ async function start() {
   showTyping();
   history.push({ role: 'user', content: 'Hola, necesito hacer un reporte.' });
   try {
-    const res = await fetch('/.netlify/functions/Claude', {
+    const res = await fetch('/.netlify/functions/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ system: buildSystem(), messages: history })
